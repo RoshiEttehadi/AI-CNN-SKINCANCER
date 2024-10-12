@@ -11,7 +11,7 @@ def train_model():
     model = create_cnn_model()
 
     # Set up callbacks
-    checkpoint = ModelCheckpoint('cnn_model_best.h5', save_best_only=True, monitor='val_loss', mode='min')
+    checkpoint = ModelCheckpoint('cnn_model_best.keras', save_best_only=True, monitor='val_loss', mode='min')
     early_stop = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 
     # Train the model
@@ -19,7 +19,7 @@ def train_model():
               callbacks=[checkpoint, early_stop])
 
     # Save the trained model
-    model.save('cnn_model_final.h5')
+    model.save('cnn_model_final.keras')
     print("Model training completed and saved!")
 
 if __name__ == "__main__":
