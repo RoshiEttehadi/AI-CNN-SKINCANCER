@@ -3,6 +3,9 @@ from dataset_loader import load_data
 from cnn_model import create_cnn_model
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 
+from src.evaluate import evaluate_model
+
+
 def train_model():
     # Load dataset
     X_train, X_val, y_train, y_val = load_data()
@@ -21,6 +24,9 @@ def train_model():
     # Save the trained model
     model.save('cnn_model_final.keras')
     print("Model training completed and saved!")
+
+    # Evaluate the model
+    evaluate_model(model, X_val, y_val)
 
 if __name__ == "__main__":
     train_model()
