@@ -1,6 +1,6 @@
 import tensorflow as tf
 from dataset_loader import load_data
-from cnn_model import create_cnn_model
+from melanoma_model import melanomaCNN
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 import matplotlib.pyplot as plt
 from src.evaluate import evaluate_model
@@ -11,27 +11,29 @@ def train_model():
     X_train, X_val, y_train, y_val = load_data()
 
     # Create the CNN model
-    model = create_cnn_model()
+    model = melanomaCNN(input_shape=(X_train.shape[1], X_train.shape[2], X_train.shape[3]))
+
+    # Compile the model (this was missing)
+    model.compile(optimizer='adam',
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
 
     # Set up callbacks
-    checkpoint = ModelCheckpoint('cnn_model_best.keras', save_best_only=True, monitor='val_loss', mode='min')
+    checkpoint = ModelCheckpoint('melanoma_model_best.keras', save_best_only=True, monitor='val_loss', mode='min')
     early_stop = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-
-    # # Train the model
-    # model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=50, batch_size=32,
-    #           callbacks=[checkpoint, early_stop])
-    #
-    # # Save the trained model
-    # model.save('cnn_model_final.keras')
-    # print("Model training completed and saved!")
 
     # Define the number of epochs
     epochs = 50
 
     # Train the model
-    history = model.fit(X_train, y_train, epochs=epochs,
+    history = model.fit(X_train, y_train, epochs=epochs, batch_size=32,
                         validation_data=(X_val, y_val),
+                        callbacks=[checkpoint, early_stop],
                         verbose=2)
+
+    # Save the trained model
+    model.save('melanoma_model_final.keras')
+    print("Model training completed and saved!")
 
     # Evaluate the model
     evaluate_model(model, X_val, y_val)
@@ -58,7 +60,6 @@ def train_model():
     plt.legend(loc='upper right')
     plt.title('Training and Validation Loss')
     plt.show()
-
 
 if __name__ == "__main__":
     train_model()

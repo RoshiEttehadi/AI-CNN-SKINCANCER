@@ -2,9 +2,9 @@ from tensorflow.keras.applications import VGG16
 from tensorflow.keras.layers import Dense, Flatten, Dropout
 from tensorflow.keras.models import Model
 
-def MelanomaCNN():
+def melanomaCNN(input_shape):
     # Load VGG16 without the top layers, freeze the layers
-    base_model = VGG16(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+    base_model = VGG16(weights='imagenet', include_top=False, input_shape=input_shape)
     for layer in base_model.layers:
         layer.trainable = False
 
@@ -23,3 +23,4 @@ def MelanomaCNN():
     model = Model(inputs=base_model.input, outputs=output)
 
     return model
+
