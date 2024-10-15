@@ -3,9 +3,16 @@ import cv2
 import numpy as np
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from sklearn.model_selection import train_test_split
+from pathlib import Path
 
 # Set image size
 IMG_SIZE = 224
+
+# Get current project path
+# ROOT_DIR = os.path.dirname(os.path.abspath(__file__)) # This is your Project Root
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__)) # This is your Project Root
+benign_folder = os.path.join(Path(ROOT_DIR).parent, 'datasets', 'ISIC-images-benign')
+malignant_folder = os.path.join(Path(ROOT_DIR).parent, 'datasets', 'ISIC-images-malignant')
 
 # Load images and label them
 def load_images(image_dir, label):
@@ -24,8 +31,8 @@ def load_images(image_dir, label):
 # Load malignant and benign images
 def load_data():
 
-    benign_images, benign_labels = load_images('C:/AI-CNN-SKINCANCER/datasets/ISIC-images-benign', 0)
-    malignant_images, malignant_labels = load_images('C:/AI-CNN-SKINCANCER/datasets/ISIC-images-malignant', 1)
+    benign_images, benign_labels = load_images(benign_folder, 0)
+    malignant_images, malignant_labels = load_images(malignant_folder, 1)
 
     # Combine the benign and malignant images and labels
     images = benign_images + malignant_images
