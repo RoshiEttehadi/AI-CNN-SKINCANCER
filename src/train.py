@@ -19,8 +19,8 @@ def train_model():
                   metrics=['accuracy'])
 
     # Set up callbacks
-    checkpoint = ModelCheckpoint('melanoma_model_best.keras', save_best_only=True, monitor='val_loss', mode='min')
-    early_stop = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    checkpoint = tf.keras.callbacks.ModelCheckpoint('melanoma_model_best.keras', save_best_only=True, monitor='val_loss', mode='min')
+    early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 
     # Define the number of epochs
     epochs = 50
@@ -45,7 +45,7 @@ def train_model():
     loss = history.history['loss']
     val_loss = history.history['val_loss']
 
-    epochs_range = range(epochs)
+    epochs_range = range(len(acc))
 
     plt.figure(figsize=(5, 5))
     plt.subplot(1, 2, 1)
